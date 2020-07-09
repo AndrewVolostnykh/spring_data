@@ -2,9 +2,13 @@ package com.bsa.springdata.team.dto;
 
 import com.bsa.springdata.project.dto.ProjectDto;
 import com.bsa.springdata.team.Team;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.UUID;
 
+@Data
+@Builder
 public class TeamDto {
     private final UUID id;
     private final String name;
