@@ -12,56 +12,56 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class OfficeServiceIntegrationTest {
-	@Autowired
-	private OfficeService officeService;
-	@Autowired
-	private OfficeRepository officeRepository;
+    @Autowired
+    private OfficeService officeService;
+    @Autowired
+    private OfficeRepository officeRepository;
 
-	@Test
-	public void getOfficesByTechnology() {
-		// arrange
-		var technology = "Java";
+    @Test
+    public void getOfficesByTechnology() {
+        // arrange
+        var technology = "Java";
 
-		// act
-		var offices = officeService.getByTechnology(technology);
+        // act
+        var offices = officeService.getByTechnology(technology);
 
-		// assert
-		assertThat(offices.size()).isEqualTo(1);
-	}
+        // assert
+        assertThat(offices.size()).isEqualTo(1);
+    }
 
-	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	public void updateOfficeIfThereIsAProject() {
-		// arrange
-		var oldAddress = "Chornovola 59";
-		var newAddress = "Chornovola 31";
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void updateOfficeIfThereIsAProject() {
+        // arrange
+        var oldAddress = "Chornovola 59";
+        var newAddress = "Chornovola 31";
 
-		// act
-		var updatedOffice = officeService.updateAddress(oldAddress, newAddress);
+        // act
+        var updatedOffice = officeService.updateAddress(oldAddress, newAddress);
 
-		// assert
-		assertThat(updatedOffice.isPresent()).isTrue();
-		assertThat(updatedOffice.get().getAddress()).isEqualTo(newAddress);
-	}
+        // assert
+        assertThat(updatedOffice.isPresent()).isTrue();
+        assertThat(updatedOffice.get().getAddress()).isEqualTo(newAddress);
+    }
 
-	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	public void updateOfficeIfThereIsNoProject() {
-		// arrange
-		var oldAddress = "Fake address";
-		var newAddress = "Chornovola 31";
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void updateOfficeIfThereIsNoProject() {
+        // arrange
+        var oldAddress = "Fake address";
+        var newAddress = "Chornovola 31";
 
-		var fakeOffice = Office.builder()
-				.address(oldAddress)
-				.city("Lviv")
-				.build();
+        var fakeOffice = Office.builder()
+                .address(oldAddress)
+                .city("Lviv")
+                .build();
 
-		officeRepository.save(fakeOffice);
+        officeRepository.save(fakeOffice);
 
-		// act
-		var updatedOffice = officeService.updateAddress(oldAddress, newAddress);
+        // act
+        var updatedOffice = officeService.updateAddress(oldAddress, newAddress);
 
-		// assert
-		assertThat(updatedOffice.isEmpty()).isTrue();
-	}
+        // assert
+        assertThat(updatedOffice.isEmpty()).isTrue();
+    }
 }

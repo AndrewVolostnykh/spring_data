@@ -8,9 +8,10 @@ import com.bsa.springdata.team.TechnologyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,13 +26,11 @@ public class ProjectService {
     @Autowired
     private TeamRepository teamRepository;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     public List<ProjectDto> findTop5ByTechnology(String technology) {
-        // TODO: Use single query to load data. Sort by number of developers in a project
-        //  Hint: in order to limit the query you can either use native query with limit or Pageable interface
-
         Pageable pageable = PageRequest.of(0, 5);
-
-        ;
 
         return projectRepository.findByTechnology(technology, pageable)
                 .stream()
@@ -40,9 +39,8 @@ public class ProjectService {
     }
 
     public Optional<ProjectDto> findTheBiggest() {
-        // TODO: Use single query to load data. Sort by teams, developers, project name
-        //  Hint: in order to limit the query you can either use native query with limit or Pageable interface
-        return null;
+
+        return Optional.of(ProjectDto.fromEntity(projectRepository.findTheBiggest().get(0)));
     }
 
     public List<ProjectSummaryDto> getSummary() {
@@ -51,12 +49,23 @@ public class ProjectService {
     }
 
     public int getCountWithRole(String role) {
-        // TODO: Use a single query
-        return 0;
+        return projectRepository.countByUsersRoles(role);
     }
 
     public UUID createWithTeamAndTechnology(CreateProjectRequestDto createProjectRequest) {
         // TODO: Use common JPARepository methods. Build entities in memory and then persist them
-        return null;
+
+        UUID uuid = UUID.randomUUID();
+
+        var newProject = new Project();
+        var teamResult = teamRepository.findByName(createProjectRequest.getTeamName());
+        newProject.setName(createProjectRequest.getProjectName());
+        newProject.setDescription(createProjectRequest.getProjectDescription());
+        newProject.setTeams(teamResult.stream().collect(Collectors.toList()));
+        newProject.setId(uuid);
+
+        entityManager.persist(newProject);
+
+        return uuid;
     }
 }

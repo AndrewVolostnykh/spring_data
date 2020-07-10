@@ -7,19 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, UUID> {
     Optional<Team> findByName(String name);
+
     int countByTechnologyName(String name);
-
-    //select p.name from Project p where t.project_id = p.id
-//    t.name ||  from Project p Team t on p.id = t.projectID
-
-    // "update Team t set t.name = concat(t.name, '_', t.projectName , '_', t.technologyName) where t.name = :hipsters"
 
     @Modifying
     @Transactional
@@ -29,14 +24,23 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
             "where tt.project_id = p.id and t.id = tt.technology_id and tt.name = :hipsters")
     void normalizeName(@Param("hipsters") String hipsters);
 
-//    @Query(nativeQuery = true, value = "update teams as t " +
-//            "set t.technology_id = (select tech.id from technologies as tech where tech.name = :newTechName) " +
-//            "where t.technology_id = (select tech.id from technologies as tech where tech.name = :oldTechName) " +
-//            "and (select count(u) from users as u inner join teams as team on u.team_id = team.id " +
-//            "group by team.id) < :devsNumber")
-//    void updateName(@Param("devsNumber") int devsNumber,
-//                    @Param("oldTechName") String oldTechnologyName,
-//                    @Param("newTechName") String newTechnologyName);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update teams " +
+            "set technology_id = (select id from technologies where name = :new_tech limit 1) " +
+            "from ( " +
+            "         select t.id as team_id " +
+            "         from technologies tl " +
+            "                  inner join teams t on tl.id = t.technology_id " +
+            "                  inner join users u on t.id = u.team_id " +
+            "         where tl.name = :technology " +
+            "         group by t.id " +
+            "         having count(u.id) < :devsNumber " +
+            "     ) as tl " +
+            "where tl.team_id = teams.id;")
+    void updateName(@Param("devsNumber") int devsNumber,
+                    @Param("technology") String oldTechnologyName,
+                    @Param("new_tech") String newTechnologyName);
 
 
 }

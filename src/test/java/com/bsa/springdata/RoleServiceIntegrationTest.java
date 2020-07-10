@@ -12,43 +12,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class RoleServiceIntegrationTest {
-	@Autowired
-	private RoleService roleService;
-	@Autowired
-	private RoleRepository roleRepository;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private RoleRepository roleRepository;
 
-	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	public void deleteRoleIfThereAreUsers() {
-		// arrange
-		var role = "dev";
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void deleteRoleIfThereAreUsers() {
+        // arrange
+        var role = "dev";
 
-		// act
-		roleService.deleteRole(role);
+        // act
+        roleService.deleteRole(role);
 
-		// assert
-		var roles = roleRepository.findAll();
+        // assert
+        var roles = roleRepository.findAll();
 
-		assertThat(roles.size()).isEqualTo(5);
-	}
+        assertThat(roles.size()).isEqualTo(5);
+    }
 
-	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	public void deleteRoleIfThereAreNoUsers() {
-		// arrange
-		var role = Role.builder()
-				.name("Designer")
-				.code("design")
-				.build();
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void deleteRoleIfThereAreNoUsers() {
+        // arrange
+        var role = Role.builder()
+                .name("Designer")
+                .code("design")
+                .build();
 
-		roleRepository.save(role);
+        roleRepository.save(role);
 
-		// act
-		roleService.deleteRole(role.getCode());
+        // act
+        roleService.deleteRole(role.getCode());
 
-		// assert
-		var roles = roleRepository.findAll();
+        // assert
+        var roles = roleRepository.findAll();
 
-		assertThat(roles.size()).isEqualTo(5);
-	}
+        assertThat(roles.size()).isEqualTo(5);
+    }
 }

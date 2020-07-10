@@ -11,42 +11,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class TeamServiceIntegrationTest {
-	@Autowired
-	private TeamService teamService;
-	@Autowired
-	private TeamRepository teamRepository;
+    @Autowired
+    private TeamService teamService;
+    @Autowired
+    private TeamRepository teamRepository;
 
-	@Test
-	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void updateTeamWithSmallNumberOfDeveloper() {
-		// arrange
-		var devsNumber = 5;
-		var oldTechnology = "JavaScript";
-		var newTechnology = "Java";
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    //@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void updateTeamWithSmallNumberOfDeveloper() {
+        // arrange
+        var devsNumber = 5;
+        var oldTechnology = "JavaScript";
+        var newTechnology = "Java";
 
-		// act
-		teamService.updateTechnology(devsNumber, oldTechnology, newTechnology);
+        // act
+        teamService.updateTechnology(devsNumber, oldTechnology, newTechnology);
 
-		// assert
-		var javaTeams = teamRepository.countByTechnologyName(newTechnology);
+        // assert
+        var javaTeams = teamRepository.countByTechnologyName(newTechnology);
 
-		assertThat(javaTeams).isEqualTo(4);
-	}
+        assertThat(javaTeams).isEqualTo(4);
+    }
 
-	@Test
-	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	//@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void extendTeamNameWithProjectAndTechnology() {
-		// arrange
-		var team = "Hipsters";
+    @Test
+    @Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    //@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void extendTeamNameWithProjectAndTechnology() {
+        // arrange
+        var team = "Hipsters";
 
-		// act
-		teamService.normalizeName(team);
+        // act
+        teamService.normalizeName(team);
 
-		// assert
-		var updatedTeam = teamRepository.findByName("Hipsters_Facebook_JavaScript");
+        // assert
+        var updatedTeam = teamRepository.findByName("Hipsters_Facebook_JavaScript");
 
-		assertThat(updatedTeam.isPresent()).isTrue();
-	}
+        assertThat(updatedTeam.isPresent()).isTrue();
+    }
 }

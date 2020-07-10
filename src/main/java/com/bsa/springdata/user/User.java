@@ -27,7 +27,7 @@ public class User {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name="UUID",
+            name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
@@ -58,11 +58,11 @@ public class User {
 
     public static User fromDto(CreateUserDto user, Office office, Team team) {
         return User.builder()
-            .firstName(user.getFirstName())
-            .lastName(user.getLastName())
-            .experience(user.getExperience())
-            .office(office)
-            .team(team)
-            .build();
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .experience(user.getExperience())
+                .office(office)
+                .team(team)
+                .build();
     }
 }

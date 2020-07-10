@@ -1,8 +1,6 @@
 package com.bsa.springdata;
 
 import com.bsa.springdata.user.UserService;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,89 +11,89 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class UserServiceIntegrationTest {
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Test
-	@Transactional
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void getUsersByLastName() {
-		// arrange
-		var lastName = "b";
-		var page = 0;
-		var size = 10;
-
-
-		//act
-		var users = userService.findByLastName(lastName, page, size);
-
-		// assert
-		assertThat(users.size()).isEqualTo(3);
-		assertThat(users.get(0).getLastName()).isEqualTo("Bain");
-		assertThat(users.get(2).getExperience()).isEqualTo(5);
-	}
-
-	@Test
-	@Transactional
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void getUsersByCity() {
+    @Test
+    @Transactional
+    //@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void getUsersByLastName() {
+        // arrange
+        var lastName = "b";
+        var page = 0;
+        var size = 10;
 
 
-		// arrange
-		var city = "Lviv";
+        //act
+        var users = userService.findByLastName(lastName, page, size);
 
-		// act
-		var users = userService.findByCity(city);
+        // assert
+        assertThat(users.size()).isEqualTo(3);
+        assertThat(users.get(0).getLastName()).isEqualTo("Bain");
+        assertThat(users.get(2).getExperience()).isEqualTo(5);
+    }
 
-		// assert
-		assertThat(users.size()).isEqualTo(10);
-		assertThat(users.get(9).getLastName()).isEqualTo("Yu");
-	}
+    @Test
+    @Transactional
+//    @Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void getUsersByCity() {
 
-	@Test
-	@Transactional
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void getUsersByExperience() {
-		// arrange
-		var experience = 5;
 
-		// act
-		var users = userService.findByExperience(experience);
+        // arrange
+        var city = "Lviv";
 
-		// assert
-		assertThat(users.size()).isEqualTo(6);
-		assertThat(users.get(5).getLastName()).isEqualTo("King");
-	}
+        // act
+        var users = userService.findByCity(city);
 
-	@Test
-	@Transactional
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void getUsersByRoomAndCity() {
-		// arrange
-		var city = "Lviv";
-		var room = "red";
+        // assert
+        assertThat(users.size()).isEqualTo(10);
+        assertThat(users.get(9).getLastName()).isEqualTo("Yu");
+    }
 
-		// act
-		var users = userService.findByRoomAndCity(city, room);
+    @Test
+    @Transactional
+//    @Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void getUsersByExperience() {
+        // arrange
+        var experience = 5;
 
-		// assert
-		assertThat(users.size()).isEqualTo(4);
-		assertThat(users.stream().anyMatch(x -> x.getLastName().equals("Peterson"))).isTrue();
-	}
+        // act
+        var users = userService.findByExperience(experience);
 
-	@Test
-	@Transactional
-	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	public void deleteUsersByExperience() {
-		// arrange
-		var experience = 5;
+        // assert
+        assertThat(users.size()).isEqualTo(6);
+        assertThat(users.get(5).getLastName()).isEqualTo("King");
+    }
 
-		// act
-		var numberOfRemoved = userService.deleteByExperience(experience);
-		// assert
-		assertThat(numberOfRemoved).isEqualTo(14);
-		var usersLeft = userService.getUsers();
-		assertThat(usersLeft.size()).isEqualTo(6);
-	}
+    @Test
+    @Transactional
+//    @Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void getUsersByRoomAndCity() {
+        // arrange
+        var city = "Lviv";
+        var room = "red";
+
+        // act
+        var users = userService.findByRoomAndCity(city, room);
+
+        // assert
+        assertThat(users.size()).isEqualTo(4);
+        assertThat(users.stream().anyMatch(x -> x.getLastName().equals("Peterson"))).isTrue();
+    }
+
+    @Test
+    @Transactional
+    //@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//    @Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void deleteUsersByExperience() {
+        // arrange
+        var experience = 5;
+
+        // act
+        var numberOfRemoved = userService.deleteByExperience(experience);
+        // assert
+        assertThat(numberOfRemoved).isEqualTo(14);
+        var usersLeft = userService.getUsers();
+        assertThat(usersLeft.size()).isEqualTo(6);
+    }
 }
