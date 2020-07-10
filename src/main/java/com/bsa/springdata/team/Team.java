@@ -36,4 +36,5 @@ public class Team {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technology_id")
     private Technology technology;
+
 }

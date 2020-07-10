@@ -17,7 +17,8 @@ public class TeamServiceIntegrationTest {
 	private TeamRepository teamRepository;
 
 	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void updateTeamWithSmallNumberOfDeveloper() {
 		// arrange
 		var devsNumber = 5;
@@ -34,7 +35,8 @@ public class TeamServiceIntegrationTest {
 	}
 
 	@Test
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	//@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void extendTeamNameWithProjectAndTechnology() {
 		// arrange
 		var team = "Hipsters";
