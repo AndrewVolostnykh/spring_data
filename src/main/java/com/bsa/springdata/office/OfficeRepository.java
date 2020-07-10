@@ -39,4 +39,6 @@ public interface OfficeRepository extends JpaRepository<Office, UUID> {
     void updateOfficeAddress(@Param("old_address") String oldAddress, @Param("address") String newAddress);
 
     Office findByAddress(String address);
+
+    Office findOneByAddress(String address);
 }

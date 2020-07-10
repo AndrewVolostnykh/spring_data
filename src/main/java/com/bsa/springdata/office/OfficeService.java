@@ -22,6 +22,6 @@ public class OfficeService {
         //  Hint: Every user is connected to one of the project. There cannot be any users without a project.
         officeRepository.updateOfficeAddress(oldAddress, newAddress);
 
-        return Optional.of(OfficeDto.fromEntity(officeRepository.findByAddress(newAddress)));
+        return Optional.of(OfficeDto.fromEntity(officeRepository.findOneByAddress(newAddress)));
     }
 }
