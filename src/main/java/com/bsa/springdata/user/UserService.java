@@ -85,6 +85,7 @@ public class UserService {
         );
 
         //return queriedUsers.stream().map(UserMapper.MAPPER::userToUserDto).collect(Collectors.toList()); // this dont works
+
         return result;
     }
 
