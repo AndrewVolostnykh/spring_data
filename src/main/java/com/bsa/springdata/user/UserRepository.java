@@ -3,6 +3,7 @@ package com.bsa.springdata.user;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,5 +30,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "where o.city = :city " +
             "and t.room = :room")
     List<User> findByCityAndRoom(@Param("city") String city, @Param("room") String room, Sort sort);
+
+    @Modifying
+    @Query("delete from User u where u.experience < :experience")
+    int deletedUsersLessThanExperience(@Param("experience") int experience);
 
 }

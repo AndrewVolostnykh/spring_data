@@ -85,14 +85,14 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
-	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	//@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void deleteUsersByExperience() {
 		// arrange
 		var experience = 5;
 
 		// act
 		var numberOfRemoved = userService.deleteByExperience(experience);
-
 		// assert
 		assertThat(numberOfRemoved).isEqualTo(14);
 		var usersLeft = userService.getUsers();

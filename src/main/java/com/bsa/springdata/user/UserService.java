@@ -148,6 +148,7 @@ public class UserService {
 
     public int deleteByExperience(int experience) {
         // TODO: Use a single query. Return a number of deleted rows
-        return 0;
+
+        return userRepository.deletedUsersLessThanExperience(experience);
     }
 }
