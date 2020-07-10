@@ -2,6 +2,7 @@ package com.bsa.springdata.office;
 
 import com.bsa.springdata.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,9 +12,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
 @Entity
-@NoArgsConstructor
+@Table(name = "offices")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Office {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -22,9 +25,11 @@ public class Office {
             strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column
     private String city;
+    @Column
     private String address;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "office")
+    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users;
 }

@@ -26,6 +26,6 @@ public class Project {
     private UUID id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "projects")
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Team> teams;
 }

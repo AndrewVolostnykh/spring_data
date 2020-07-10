@@ -31,17 +31,29 @@ public class User {
             strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+
     private String firstName;
+
     private String lastName;
+
     private int experience;
-    @ManyToOne
-    @JoinColumn(name = "id")
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "office_id")
     private Office office;
-    @ManyToOne
-    @JoinColumn(name = "id")
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
     private Team team;
-    @ManyToMany
-    @JoinTable(name = "User2Role", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+
+    @ManyToMany(cascade = {
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    }, fetch = FetchType.LAZY)
+    @JoinTable(name = "User2Role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     public static User fromDto(CreateUserDto user, Office office, Team team) {

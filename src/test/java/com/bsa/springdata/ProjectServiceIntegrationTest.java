@@ -72,7 +72,7 @@ public class ProjectServiceIntegrationTest {
 	}
 
 	@Test
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void createProjectWithTeamWithTechnology() {
 		// arrange
 		var createProjectRequest = new CreateProjectRequestDto(

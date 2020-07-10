@@ -28,12 +28,12 @@ public class Team {
     private String name;
     private String room;
     private String area;
-    @ManyToMany
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "project_id")
     private Project project;
-    @OneToMany(orphanRemoval = true, mappedBy = "teams")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
     private List<User> users;
-    @ManyToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "technology_id")
     private Technology technology;
 }

@@ -1,6 +1,8 @@
 package com.bsa.springdata;
 
 import com.bsa.springdata.user.UserService;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,13 +18,15 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getUsersByLastName() {
 		// arrange
 		var lastName = "b";
 		var page = 0;
 		var size = 10;
 
-		// act
+
+		//act
 		var users = userService.findByLastName(lastName, page, size);
 
 		// assert
@@ -33,7 +37,10 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getUsersByCity() {
+
+
 		// arrange
 		var city = "Lviv";
 
@@ -47,6 +54,7 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getUsersByExperience() {
 		// arrange
 		var experience = 5;
@@ -61,6 +69,7 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
+	@Sql(scripts = {"/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getUsersByRoomAndCity() {
 		// arrange
 		var city = "Lviv";
@@ -76,7 +85,7 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	@Transactional
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void deleteUsersByExperience() {
 		// arrange
 		var experience = 5;

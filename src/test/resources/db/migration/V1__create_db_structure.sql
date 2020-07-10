@@ -69,9 +69,3 @@ add constraint fk_users2offices foreign key (office_id) references offices;
 
 alter table if exists users
 add constraint fk_users2teams foreign key (team_id) references teams;
-
-
-
-select u.* from users as u
-inner join offices as o on u.office_id = o.id
-where o.city = :city

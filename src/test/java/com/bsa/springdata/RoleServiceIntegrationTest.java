@@ -1,6 +1,5 @@
 package com.bsa.springdata;
 
-import com.bsa.springdata.office.Office;
 import com.bsa.springdata.role.Role;
 import com.bsa.springdata.role.RoleRepository;
 import com.bsa.springdata.role.RoleService;
@@ -19,7 +18,7 @@ public class RoleServiceIntegrationTest {
 	private RoleRepository roleRepository;
 
 	@Test
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void deleteRoleIfThereAreUsers() {
 		// arrange
 		var role = "dev";
@@ -34,7 +33,7 @@ public class RoleServiceIntegrationTest {
 	}
 
 	@Test
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void deleteRoleIfThereAreNoUsers() {
 		// arrange
 		var role = Role.builder()

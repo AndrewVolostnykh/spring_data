@@ -30,7 +30,7 @@ public class OfficeServiceIntegrationTest {
 	}
 
 	@Test
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void updateOfficeIfThereIsAProject() {
 		// arrange
 		var oldAddress = "Chornovola 59";
@@ -45,7 +45,7 @@ public class OfficeServiceIntegrationTest {
 	}
 
 	@Test
-	@Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = {"/db/testdata/V4__clean.sql", "/db/migration/V2__seed_data.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	public void updateOfficeIfThereIsNoProject() {
 		// arrange
 		var oldAddress = "Fake address";

@@ -2,6 +2,7 @@ package com.bsa.springdata.role;
 
 import com.bsa.springdata.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 // TODO: Map table roles to this entity
 @Data
+@Builder
 @Entity
 @Table(name = "roles")
 @NoArgsConstructor
@@ -27,6 +29,6 @@ public class Role {
     private UUID id;
     private String name;
     private String code;
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 }
