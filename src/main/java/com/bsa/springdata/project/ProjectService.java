@@ -3,15 +3,15 @@ package com.bsa.springdata.project;
 import com.bsa.springdata.project.dto.CreateProjectRequestDto;
 import com.bsa.springdata.project.dto.ProjectDto;
 import com.bsa.springdata.project.dto.ProjectSummaryDto;
+import com.bsa.springdata.team.Team;
 import com.bsa.springdata.team.TeamRepository;
+import com.bsa.springdata.team.Technology;
 import com.bsa.springdata.team.TechnologyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,9 +25,6 @@ public class ProjectService {
     private TechnologyRepository technologyRepository;
     @Autowired
     private TeamRepository teamRepository;
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     public List<ProjectDto> findTop5ByTechnology(String technology) {
         Pageable pageable = PageRequest.of(0, 5);
@@ -52,20 +49,34 @@ public class ProjectService {
         return projectRepository.countByUsersRoles(role);
     }
 
-    public UUID createWithTeamAndTechnology(CreateProjectRequestDto createProjectRequest) {
+    public UUID createWithTeamAndTechnology(CreateProjectRequestDto req) {
         // TODO: Use common JPARepository methods. Build entities in memory and then persist them
 
-        UUID uuid = UUID.randomUUID();
+        var technology = Technology
+                .builder()
+                .description(req.getTechDescription())
+                .link(req.getTechLink())
+                .name(req.getTech())
+                .build();
 
-        var newProject = new Project();
-        var teamResult = teamRepository.findByName(createProjectRequest.getTeamName());
-        newProject.setName(createProjectRequest.getProjectName());
-        newProject.setDescription(createProjectRequest.getProjectDescription());
-        newProject.setTeams(teamResult.stream().collect(Collectors.toList()));
-        newProject.setId(uuid);
 
-        entityManager.persist(newProject);
+        var team = Team
+                .builder()
+                .name(req.getTeamName())
+                .area(req.getTeamArea())
+                .room(req.getTeamRoom())
+                .technology(technology)
+                .build();
 
-        return uuid;
+
+        var project = Project
+                .builder()
+                .name(req.getProjectName())
+                .description(req.getProjectDescription())
+                .teams(List.of(team))
+                .build();
+
+
+        return projectRepository.save(project).getId();
     }
 }

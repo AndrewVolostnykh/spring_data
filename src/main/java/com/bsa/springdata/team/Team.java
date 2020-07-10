@@ -3,6 +3,7 @@ package com.bsa.springdata.team;
 import com.bsa.springdata.project.Project;
 import com.bsa.springdata.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "teams")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
@@ -33,7 +35,7 @@ public class Team {
     private Project project;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
     private List<User> users;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "technology_id")
     private Technology technology;
 
