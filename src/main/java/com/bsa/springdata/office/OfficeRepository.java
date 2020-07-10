@@ -26,7 +26,7 @@ public interface OfficeRepository extends JpaRepository<Office, UUID> {
 
     @Modifying
     @Transactional
-    @Query(value = "update offices as off " +
+    @Query(value = "update offices " +
             "set address = :address " +
             "from ( " +
             "         select o.id from offices as o " +
@@ -35,7 +35,7 @@ public interface OfficeRepository extends JpaRepository<Office, UUID> {
             "             inner join projects p on t.project_id = p.id " +
             "             where o.address = :old_address " +
             "         ) as o " +
-            "where o.id = off.id", nativeQuery = true)
+            "where o.id = offices.id", nativeQuery = true)
     void updateOfficeAddress(@Param("old_address") String oldAddress, @Param("address") String newAddress);
 
     Office findByAddress(String address);
